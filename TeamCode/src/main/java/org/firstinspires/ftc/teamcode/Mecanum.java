@@ -71,7 +71,7 @@ public class Mecanum extends OpMode {
         }
 
         //
-        // if (gamepad1.dpad_down) {
+        if (gamepad1.dpad_down) {
             // move to 0 degrees.
             servoOne.setPosition(0);
         } else if (gamepad1.dpad_right) {
