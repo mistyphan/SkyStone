@@ -1,63 +1,74 @@
+// simple autonomous program that drives bot forward 2 seconds then ends.
+
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
-import com.qualcomm.robotcore.robot.Robot;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="Auto Block", group="Skystone");
+// below is the Annotation that registers this OpMode with the FtcRobotController app.
+// @Autonomous classifies the OpMode as autonomous, name is the OpMode title and the
+// optional group places the OpMode into the Exercises group.
+// uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
-public class Auto extends LinearOpMode {
+@Autonomous(name="Drive Forward", group="Exercises")
+//@Disabled
+public class Autonomus extends LinearOpMode
+{
+    DcMotor frontleft;
+    DcMotor backleft;
+    DcMotor frontright;
+    DcMotor backright;
+    Servo servoOne;
 
-        RobotHardware robot = new RobotHardware();
-        private Gyroscope imu;
+    // called when init button is  pressed.
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException
+    {
+        frontleft = hardwareMap.dcMotor.get("front_left");
+        frontright = hardwareMap.dcMotor.get("front_right");
+        backleft = hardwareMap.dcMotor.get("back_left");
+        backright = hardwareMap.dcMotor.get("back_right");
+        servoOne = hardwareMap.servo.get("servoOne");
 
-        robot.init(HardwareMap);
+        frontleft.setDirection(DcMotor.Direction.REVERSE);
+        backleft.setDirection(DcMotor.Direction.REVERSE);
+
+        telemetry.addData("Mode", "waiting");
+        telemetry.update();
+
+        // wait for start button.
 
         waitForStart();
 
-        /* the following formula is used to calculate the number of ticks per inch
-        (3.14(3.93701)(2)/1120 = .02208 inches per encoder tick
-         */
+        telemetry.addData("Mode", "running");
+        telemetry.update();
 
-        robot.frontleft.setTargetPosition(-1087);     // goes forward 24 inches or one mat length
-        robot.backleft.setTargetPosition(-1087);
-        robot.frontright.setTargetPosition(1087);
-        robot.backright.setTargetPosition(1087);
-        robot.frontleft.setPower(-1);
-        robot.backleft.setPower(-1);
-        robot.backright.setPower(1);
-        robot.backright.setPower(1);
-        sleep(7000);
+        moveStraight(0.75, 5 );
+        moveStraight(-0.75, 5 );
 
-        while (robot.gyroSensor.getHeading() > 275 || robot.GyroSensor.getHeading() > 265)
-            robot.frontleft.setPower-(1);
-            robot.backleft.setPower(-1);
-            robot.motoRF.setPower(-1);
-            robot.backright.setPower-(1);
-        }
-        robot.frontleft.setPower(0)
-        robot.motorLB.setPower(0)
-        robot.frontright.setPower(0)
-        robot.backright.setPower(0)
+        servoOne.setPosition(.5);
+        sleep(10000);
+
+    }
+
+
+    public void moveStraight (double power, double seconds)
     {
-        robot.frontleft.setTargetPosition(-1087);     // goes forward 24 inches or one mat length
-        robot.motorLB.setTargetPosition(-1087);
-        robot.frontright.setTargetPosition(1087);
-        robot.backright.setTargetPosition(1087);
-        robot.frontleft.setPower(-1);
-        robot.backleft.setPower(-1);
-        robot.frontright.setPower(1);
-        robot.backright.setPower(1);
-        sleep(7000);
+        frontleft.setPower(power);
+        backleft.setPower(power);
+        frontright.setPower(power);
+        backright.setPower(power);
+
+        long milliseconds = (long) (seconds * 1000);
+        sleep(milliseconds);
+
+        frontleft.setPower(0.0);
+        backleft.setPower(0.0);
+        frontright.setPower(0.0);
+        backright.setPower(0.0);
+
     }
 }
