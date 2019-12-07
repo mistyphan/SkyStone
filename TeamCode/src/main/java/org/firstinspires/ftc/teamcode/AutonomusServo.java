@@ -1,26 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-/*import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
-
-
-
-
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-        import com.qualcomm.robotcore.hardware.GyroSensor;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.Gyroscope;
-        import com.qualcomm.robotcore.robot.Robot;
-        import com.qualcomm.robotcore.util.ElapsedTime;
-        import com.qualcomm.robotcore.util.Range;
-        import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name= "Foundation", group="Skystone")
 // below is the Annotation that registers this OpMode with the FtcRobotController app.
@@ -29,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 // uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
 //@Disabled
-    public class Autonomus extends LinearOpMode {
+    public class AutonomusServo extends LinearOpMode {
     DcMotor frontleft;
     DcMotor backleft;
     DcMotor frontright;
@@ -68,13 +52,11 @@ import com.qualcomm.robotcore.hardware.Servo;
         telemetry.addData("Mode", "running");
         telemetry.update();
 
-        drive(6);
-        sleep(5000);
-        drive(-6);
+        servoLine.setPosition(.8);
 
 
         }
-        public void drive (int distance) {
+        /*public void drive (int distance) {
         {
             int goTo =  distance * ticksPerInch;
             frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -107,7 +89,6 @@ import com.qualcomm.robotcore.hardware.Servo;
             frontright.setPower(0);
             backright.setPower(0);
         }
-        servoLine.setPosition(0);
+        */
         }
     }
-*/
