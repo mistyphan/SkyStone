@@ -35,11 +35,14 @@ import java.lang.annotation.Target;
     int countsPerMotorRev = 1120 ;
     double gearReduction = 32/24 ;     // This is < 1.0 if geared UP
     double wheelDiamater = 3.93701;     // For figuring circumference
-    double ticksPerInch = (countsPerMotorRev * gearReduction) / ( wheelDiamater * pi);
+    double ticksPerInchDec = (countsPerMotorRev * gearReduction) / ( wheelDiamater * pi);
+    int ticksPerInch = (int) ticksPerInchDec;
     int frontleftTarget;
     int backleftTarget;
     int frontrightTarget;
     int backrightTarget;
+    double speed;
+    double time;
 
 
     private Gyroscope imu;
@@ -64,43 +67,46 @@ import java.lang.annotation.Target;
         waitForStart();
 
 
-        drive(90, .5, 12);
+        drive(0, 500, 0.5);
+        sleep(2000);
+        drive(90, 500, 0.5);
+        sleep(2000);
+        drive(180, 500, 0.5);
+        sleep(2000);
+        drive(270, 500, 0.5);
+        sleep(2000);
 
+
+      }
+      public void drive (double angle, int time, double speed) {
+
+        double y = speed * java.lang.Math.sin(Math.toRadians(angle));
+        double x = speed * java.lang.Math.cos(Math.toRadians(angle));
+
+        double fl = -(y + x);
+        double fr = y - x;
+        double bl = -(y - x);
+        double br = y + x;
+
+        double max = Math.max(Math.max(Math.abs(fl), Math.abs(fr)), Math.max(Math.abs(bl), Math.abs(br)));
+        if (max > 1) {
+            fl /= max;
+            fr /= max;
+            bl /= max;
+            br /= max;
+        }
+
+        frontleft.setPower(fl);
+        frontright.setPower(fr);
+        backleft.setPower(bl);
+        backright.setPower(br);
+
+        sleep(time);
+
+        frontleft.setPower(0);
+        backleft.setPower(0);
+        frontright.setPower(0);
+        backright.setPower(0);
+        }
 
     }
-        public void drive (int angle, double pwr, double distance) {
-
-            //double y = java.lang.Math.sin(angle) * velocity;
-            //double x = java.lang.Math.cos(angle) * velocity;
-
-
-
-            frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            frontleftTarget = frontleft.getCurrentPosition() + (int)(y * ticksPerInch);
-            backleftTarget = backleft.getCurrentPosition() + (int)(x * ticksPerInch);
-            frontrightTarget = frontright.getCurrentPosition() + (int)(y * ticksPerInch);
-            backleftTarget =  backright.getCurrentPosition() + (int)(x * ticksPerInch);
-
-            x += java.lang.Math.cos(angle*pi/180)*distance;
-            y += java.lang.Math.sin(angle*pi/180)*distance;
-
-
-            if (Math.abs(x) < deadzone) x = 0;
-            if (Math.abs(y) < deadzone) y = 0;
-
-            frontright.setPower(Range.clip(pwr - x + z, -1, 1));
-            backleft.setPower(Range.clip(pwr - x - z, -1, 1));
-            frontleft.setPower(Range.clip(pwr + x - z, -1, 1));
-            backright.setPower(Range.clip(pwr + x + z, -1, 1));
-
-    }
-}
