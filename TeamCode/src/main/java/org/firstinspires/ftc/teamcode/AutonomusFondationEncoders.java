@@ -58,9 +58,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
         waitForStart();
 
-
-        driveTime(0, 500, 0.5);
-        sleep(2000);
         driveEncoder(90, .5, 6);
 
 
@@ -114,10 +111,21 @@ import com.qualcomm.robotcore.hardware.Servo;
             br /= max;
 
         }
+
         FLTarget = frontleft.getCurrentPosition() + (int) (inches * ticksPerInch);
         BLTarget = backleft.getCurrentPosition() + (int) (inches * ticksPerInch);
         FRTarget = frontright.getCurrentPosition() + (int) (inches * ticksPerInch);
         BRTarget = backright.getCurrentPosition() + (int) (inches * ticksPerInch);
+
+        frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         frontleft.setTargetPosition(FLTarget);
         backleft.setTargetPosition(BLTarget);
@@ -135,11 +143,11 @@ import com.qualcomm.robotcore.hardware.Servo;
         backright.setPower(br);
 
         while (frontleft.isBusy() && (backleft.isBusy() && frontright.isBusy() && backright.isBusy())) {
-
-            frontleft.setPower(0);
-            backleft.setPower(0);
-            frontright.setPower(0);
-            backright.setPower(0);
         }
+
+        frontleft.setPower(0);
+        backleft.setPower(0);
+        frontright.setPower(0);
+        backright.setPower(0);
     }
 }
