@@ -9,21 +9,18 @@ import com.qualcomm.robotcore.util.Range;
 
 import android.os.Handler;
 import android.os.SystemClock;
+
 import android.util.Log;
 import android.view.ViewParent;
 
 @TeleOp(name = "Tele Op")
 public class Mecanum extends OpMode {
-    DcMotor frontleft, frontright, backleft, backright, arm;
+    DcMotor frontleft, frontright, backleft, backright, lift, slide;
     public float x, y, z, w, pwr;
     public static double deadzone = 0.2;
-    private Servo servoLine;
-    private Servo servoArm;
-    private Servo servoFoundation;
+    private Servo servoRotate;
+    private Servo servoPinch;
 
-    double LineVal = 0;
-    double foundVal = 0;
-    double armVal = 0;
 
     @Override
     public void init() {
@@ -31,10 +28,8 @@ public class Mecanum extends OpMode {
         frontright = hardwareMap.dcMotor.get("front_right");
         backleft = hardwareMap.dcMotor.get("back_left");
         backright = hardwareMap.dcMotor.get("back_right");
-        servoLine = hardwareMap.servo.get("servoLine");
-        servoFoundation = hardwareMap.get(Servo.class, "servoFoundation");
-        servoArm = hardwareMap.get(Servo.class, "servoArm");
-        arm = hardwareMap.dcMotor.get("arm");
+        servoRotate = hardwareMap.servo.get("servo_Rotate");
+        servoPinch = hardwareMap.get(Servo.class,"servo_Pinch");
 
         frontleft.setDirection(DcMotor.Direction.REVERSE);
         backleft.setDirection(DcMotor.Direction.REVERSE);
@@ -69,49 +64,35 @@ public class Mecanum extends OpMode {
         if (Math.abs(w) < 0.9) w = 0;
         //checks deadzones
 
-        if (gamepad1.dpad_right) {
-            servoArm.setPosition(0);
-        } else if (gamepad1.dpad_left) {
-            servoArm.setPosition(.3);
+        if (gamepad1.dpad_up) {
+            lift.setPower(.75);
+        } else if (gamepad1.dpad_down) {
+            lift.setPower(-.75);
         }
+        else {
+            lift.setPower(0);
 
 
-        if (gamepad1.a) {
-            servoFoundation.setPosition(.8);
-        } else if (gamepad1.b) {
-            // move to 180 degrees.
-            servoFoundation.setPosition(0);
+        if (gamepad1.dpad_left) {
+            slide.setPower(.5);
+        } else if (gamepad1.dpad_right) {
+            slide.setPower(-.5);
+        }
+        else {
+            slide.setPower(0);
         }
 
         if (gamepad1.x) {
-            servoLine.setPosition(0.35);
-        } else if (gamepad1.y) {
-            // move to 180 degrees.
-            servoLine.setPosition(0);
+            servoRotate.setPosition(0.35);
+        } else if (gamepad1.b) {
+            servoRotate.setPosition(0);
         }
 
-        if (gamepad1.dpad_down) {
-            arm.setPower(.75);
-        } else if (gamepad1.dpad_up) {
-            arm.setPower(-.75);
+        if (gamepad1.x) {
+            servoPinch.setPosition(0.35);
+        } else if (gamepad1.b) {
+            servoPinch.setPosition(0);
         }
-        else {
-            arm.setPower(0);
-        }
-
-
-      //servoArm.setPosition(gamepad2.left_stick_x);
-      //servoFoundation.setPosition(gamepad2.right_stick_x);
-      //servoLine.setPosition(gamepad2.left_stick_y);
-
-
-
-
-
-
-        telemetry.addData("Arm Position",servoArm.getPosition());
-        telemetry.addData("Foundation Position",servoFoundation.getPosition());
-        telemetry.addData("Line Position",servoLine.getPosition());
-
+}
     }
 }

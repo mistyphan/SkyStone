@@ -28,13 +28,23 @@ import com.qualcomm.robotcore.hardware.Servo;
     double wheelDiamater = 3.93701;     // For figuring circumference
     double ticksPerInchDec = (countsPerMotorRev * gearReduction) / (wheelDiamater * pi);
     int ticksPerInch = (int) ticksPerInchDec;
-    int FLTarget;
-    int BLTarget;
-    int FRTarget;
-    int BRTarget;
+    long FLTarget;
+    long BLTarget;
+    long FRTarget;
+    long BRTarget;
     double speed;
     double time;
     double inches;
+    double yEncoderRaw;
+    double xEncoderRaw;
+    double FLD;
+    double BLD;
+    double FRD;
+    double BRD;
+    int FLInches;
+    long BLInches;
+    long FRInches;
+    long BRInches;
 
 
     private Gyroscope imu;
@@ -58,7 +68,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
         waitForStart();
 
-        driveEncoder(90, .5, 6);
+        driveEncoder(90, .5, 12);
+        driveEncoder(30, .6, 6);
+
 
 
     }
@@ -112,10 +124,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
         }
 
-        FLTarget = frontleft.getCurrentPosition() + (int) (inches * ticksPerInch);
-        BLTarget = backleft.getCurrentPosition() + (int) (inches * ticksPerInch);
-        FRTarget = frontright.getCurrentPosition() + (int) (inches * ticksPerInch);
-        BRTarget = backright.getCurrentPosition() + (int) (inches * ticksPerInch);
+        int FLInches = (int) Math.round(fl * inches);
+        int FRInches = (int) Math.round(fr * inches);
+        int BLInches = (int) Math.round(bl * inches);
+        int BRInches = (int) Math.round(br * inches);
+
+        int FLTarget = frontleft.getCurrentPosition() + (FLInches);
+        int BLTarget = backleft.getCurrentPosition() + (BLInches);
+        int FRTarget = frontright.getCurrentPosition() + (FRInches);
+        int BRTarget = backright.getCurrentPosition() + (BRInches);
 
         frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -144,6 +161,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
         while (frontleft.isBusy() && (backleft.isBusy() && frontright.isBusy() && backright.isBusy())) {
         }
+
 
         frontleft.setPower(0);
         backleft.setPower(0);
