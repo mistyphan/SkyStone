@@ -7,11 +7,6 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import android.os.Handler;
-import android.os.SystemClock;
-
-import android.util.Log;
-import android.view.ViewParent;
 
 @TeleOp(name = "Tele Op")
 public class Mecanum extends OpMode {
@@ -24,12 +19,15 @@ public class Mecanum extends OpMode {
 
     @Override
     public void init() {
-        frontleft = hardwareMap.dcMotor.get("front_left");
-        frontright = hardwareMap.dcMotor.get("front_right");
-        backleft = hardwareMap.dcMotor.get("back_left");
-        backright = hardwareMap.dcMotor.get("back_right");
-        servoRotate = hardwareMap.servo.get("servo_Rotate");
-        servoPinch = hardwareMap.get(Servo.class,"servo_Pinch");
+        frontleft = hardwareMap.dcMotor.get("FL");
+        frontright = hardwareMap.dcMotor.get("FR");
+        backleft = hardwareMap.dcMotor.get("BL");
+        backright = hardwareMap.dcMotor.get("BR");
+        lift = hardwareMap.dcMotor.get("Lift");
+        slide = hardwareMap.dcMotor.get("Slide");
+        servoRotate = hardwareMap.servo.get("ServoRotate");
+        servoPinch = hardwareMap.servo.get("ServoPinch");
+
 
         frontleft.setDirection(DcMotor.Direction.REVERSE);
         backleft.setDirection(DcMotor.Direction.REVERSE);

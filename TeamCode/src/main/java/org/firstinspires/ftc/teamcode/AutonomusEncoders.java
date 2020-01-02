@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 // uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
 //@Disabled
-    public class AutonomusFondationEncoders extends LinearOpMode {
+    public class AutonomusEncoders extends LinearOpMode {
     DcMotor frontleft;
     DcMotor backleft;
     DcMotor frontright;
@@ -52,10 +52,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
     @Override
     public void runOpMode() {
-        frontleft = hardwareMap.dcMotor.get("front_left");
-        frontright = hardwareMap.dcMotor.get("front_right");
-        backleft = hardwareMap.dcMotor.get("back_left");
-        backright = hardwareMap.dcMotor.get("back_right");
+        frontleft = hardwareMap.dcMotor.get("FL");
+        frontright = hardwareMap.dcMotor.get("FR");
+        backleft = hardwareMap.dcMotor.get("BL");
+        backright = hardwareMap.dcMotor.get("BR");
         servoLine = hardwareMap.servo.get("servoLine");
 
         //robot.init(HardwareMap);
