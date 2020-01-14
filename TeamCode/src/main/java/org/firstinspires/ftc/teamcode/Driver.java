@@ -2,19 +2,21 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name = "Tele Op")
-public class Mecanum extends OpMode {
-    DcMotor frontleft, frontright, backleft, backright, lift, slide;
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele Op")
+public class Driver extends OpMode {
+    DcMotor frontleft, frontright, backleft, backright, arm;
     public float x, y, z, w, pwr;
     public static double deadzone = 0.2;
-    private Servo servoRotate;
-    private Servo servoPinch;
+    private CRServo Grabber;
+    private CRServo servoFoundationLeft;
+    private CRServo servoFoundationRight;
 
 
     @Override
@@ -23,10 +25,10 @@ public class Mecanum extends OpMode {
         frontright = hardwareMap.dcMotor.get("FR");
         backleft = hardwareMap.dcMotor.get("BL");
         backright = hardwareMap.dcMotor.get("BR");
-        lift = hardwareMap.dcMotor.get("Lift");
-        slide = hardwareMap.dcMotor.get("Slide");
-        servoRotate = hardwareMap.servo.get("ServoRotate");
-        servoPinch = hardwareMap.servo.get("ServoPinch");
+        arm = hardwareMap.dcMotor.get("Arm");
+        Grabber = hardwareMap.crservo.get("Grabber");
+        servoFoundationLeft = hardwareMap.crservo.get("ServoFoundLeft");
+        servoFoundationRight = hardwareMap.crservo.get("ServoFoundRight");
 
 
         frontleft.setDirection(DcMotor.Direction.REVERSE);
@@ -49,10 +51,10 @@ public class Mecanum extends OpMode {
 
 
     public void getJoyVals() {
-        y = -gamepad1.left_stick_y / 2;
-        x = gamepad1.left_stick_x / 2;
-        z = -gamepad1.right_stick_x / 2;
-        w = gamepad1.right_stick_y / 2;
+        y = -gamepad1.left_stick_y;
+        x = gamepad1.left_stick_x;
+        z = -gamepad1.right_stick_x;
+        w = gamepad1.right_stick_y;
         //updates joystick values
 
 
@@ -63,34 +65,27 @@ public class Mecanum extends OpMode {
         //checks deadzones
 
         if (gamepad1.dpad_up) {
-            lift.setPower(.75);
+            arm.setPower(.35);
         } else if (gamepad1.dpad_down) {
-            lift.setPower(-.75);
-        }
-        else {
-            lift.setPower(0);
-
-
-        if (gamepad1.dpad_left) {
-            slide.setPower(.5);
-        } else if (gamepad1.dpad_right) {
-            slide.setPower(-.5);
-        }
-        else {
-            slide.setPower(0);
+            arm.setPower(-.35);
+        } else {
+            arm.setPower(0);
         }
 
+        if (gamepad1.a) {
+            servoFoundationLeft.setPower(.5);
+            servoFoundationRight.setPower(-.5);
+        } else if (gamepad1.y) {
+            servoFoundationLeft.setPower(-.5);
+            servoFoundationRight.setPower(.5);
+        } else {
+            servoFoundationLeft.setPower(0);
+            servoFoundationRight.setPower(0);
+        }
         if (gamepad1.x) {
-            servoRotate.setPosition(0.35);
-        } else if (gamepad1.b) {
-            servoRotate.setPosition(0);
+            Grabber.setPower(.5);
+        } else {
+            Grabber.setPower(0);
         }
-
-        if (gamepad1.x) {
-            servoPinch.setPosition(0.35);
-        } else if (gamepad1.b) {
-            servoPinch.setPosition(0);
-        }
-}
     }
 }

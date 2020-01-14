@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.VuInterface;
 
 @Autonomous(name= "AutoEncoder", group="Skystone")
 // below is the Annotation that registers this OpMode with the FtcRobotController app.
@@ -45,6 +46,7 @@ import com.qualcomm.robotcore.hardware.Servo;
     long BLInches;
     long FRInches;
     long BRInches;
+    private VuInterface BrickVision;
 
 
     private Gyroscope imu;
