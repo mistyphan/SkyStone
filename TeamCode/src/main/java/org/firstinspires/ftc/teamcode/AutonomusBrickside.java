@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.VuInterface;
 
 @Autonomous(name= "AutoEncoder", group="Skystone")
@@ -46,7 +48,8 @@ import org.firstinspires.ftc.teamcode.VuInterface;
     long BLInches;
     long FRInches;
     long BRInches;
-    private VuInterface BrickVision;
+    private VuInterface BrickVision;// = new VuInterface(hardwareMap);
+    private OpenGLMatrix lastBrickPose;
 
 
     private Gyroscope imu;
@@ -58,9 +61,11 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         frontright = hardwareMap.dcMotor.get("FR");
         backleft = hardwareMap.dcMotor.get("BL");
         backright = hardwareMap.dcMotor.get("BR");
-        servoLine = hardwareMap.servo.get("servoLine");
+        //servoLine = hardwareMap.servo.get("servoLine");
+        BrickVision = new VuInterface(hardwareMap);
 
         //robot.init(HardwareMap);
+        BrickVision.initializeVuforia();
 
         telemetry.addData("Mode", "waiting");
         telemetry.update();
@@ -70,7 +75,15 @@ import org.firstinspires.ftc.teamcode.VuInterface;
 
         waitForStart();
 
-        driveEncoder(90, .5, 20);
+        while (true) {
+            if (BrickVision.isTargetVisible()) {
+                telemetry.addData("Visible", "Yes");
+            }
+            else {
+                telemetry.addData("Visible", "no");
+            }
+            telemetry.update();
+        }
 
 
 
@@ -180,15 +193,15 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         double br = y + x;
 
         double max = Math.max(Math.max(Math.abs(fl), Math.abs(fr)), Math.max(Math.abs(bl), Math.abs(br)));
-            if (max > 1) {
+        if (max > 1) {
             fl /= max;
             fr /= max;
             bl /= max;
             br /= max;
         }
-            frontleft.setPower(speed);
-            frontright.setPower(speed);
-            backleft.setPower(speed);
-            backright.setPower(speed);
-        }
+        frontleft.setPower(speed);
+        frontright.setPower(speed);
+        backleft.setPower(speed);
+        backright.setPower(speed);
+    }
 }
