@@ -29,15 +29,15 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 public class VuInterface {
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false  ;
+    private static final boolean PHONE_IS_PORTRAIT = false;
 
     private static final String VUFORIA_KEY =
             "ATgwoQH/////AAAAGQZIyN7blEnstZsu3+dMPasofG+vAgBRDotB5Uj24jIrGTwIbWR87Yyl7Bt+jGz9GmNtQvGxooXkEaxOgeWlNP6O2mbhOJxuIu5IuJGoFARnOeR7ImW+GwEVeWrsLrns0f0oJ+++ATKCQM34yPxSyUtXhRwip2FgdpFiBHrpHMHTjQjtRFw3YxJx2Ba8whMUO4/adth2pQWYOgnBDhugtb2c/FCWFeYH3/RB4e5FClYIUs3VN/qC0q9DTJ5gPfKVkj9iuAJFlRXOkFuAOR1yo4uzwUA6EyhGdQY+Qs/7Q1+FTLNcq0P9YYEasujFcwYlZP/3HrdS7z7o5OInyrUUMQabYyiWhjbIFnYYNEqigNuP";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -51,7 +51,7 @@ public class VuInterface {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
@@ -60,9 +60,9 @@ public class VuInterface {
     private VuforiaLocalizer vuforia = null;
     private VuforiaLocalizer.Parameters parameters;
     private boolean targetVisible = false;
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
     private HardwareMap hardwareMap;
 
     VuInterface(HardwareMap inputMap) {
@@ -73,7 +73,7 @@ public class VuInterface {
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.cameraDirection = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -88,8 +88,7 @@ public class VuInterface {
 
     }
 
-    public void initializeVuforia ()
-    {
+    public void initializeVuforia() {
 
 
         // Load the data sets for the trackable objects. These particular data
@@ -103,12 +102,12 @@ public class VuInterface {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90 ;
+            phoneXRotate = 90;
         }
         // Fix these values when robot is done
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -119,22 +118,24 @@ public class VuInterface {
         targetsSkyStone.activate();
     }
 
-    public OpenGLMatrix getBrickPose()
-    {
+    public OpenGLMatrix getBrickPose() {
         OpenGLMatrix retMatrix = null;
 
         //if (((VuforiaTrackableDefaultListener)stoneTarget.getListener()).isVisible())
 
         return retMatrix;
     }
-    public boolean isTargetVisible()
-    {
-        if (((VuforiaTrackableDefaultListener)stoneTarget.getListener()).isVisible())
-        {
-            return true;
+
+    public double[] isTargetVisible() {
+        if (((VuforiaTrackableDefaultListener) stoneTarget.getListener()).isVisible()) {
+            VectorF translation = lastLocation.getTranslation();
+            double xPosition = translation.get(0);
+            double yPosition = translation.get(1);
+            double[] xAndyPosition = {xPosition, yPosition};
+            return xAndyPosition;
         }
         else {
-            return false;
+            return null;
         }
     }
 }

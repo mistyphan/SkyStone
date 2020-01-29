@@ -50,7 +50,9 @@ import org.firstinspires.ftc.teamcode.VuInterface;
     long BRInches;
     private VuInterface BrickVision;// = new VuInterface(hardwareMap);
     private OpenGLMatrix lastBrickPose;
-
+    double xAndyPosition[];
+    double xPosition = xAndyPosition[0];
+    double yPosition = xAndyPosition[1];
 
     private Gyroscope imu;
     //called when init button is  pressed.
@@ -61,7 +63,6 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         frontright = hardwareMap.dcMotor.get("FR");
         backleft = hardwareMap.dcMotor.get("BL");
         backright = hardwareMap.dcMotor.get("BR");
-        //servoLine = hardwareMap.servo.get("servoLine");
         BrickVision = new VuInterface(hardwareMap);
 
         //robot.init(HardwareMap);
@@ -75,21 +76,11 @@ import org.firstinspires.ftc.teamcode.VuInterface;
 
         waitForStart();
 
-        while (true) {
-            if (BrickVision.isTargetVisible()) {
-                telemetry.addData("Visible", "Yes");
-            }
-            else {
-                telemetry.addData("Visible", "no");
-            }
-            telemetry.update();
-        }
-
 
 
     }
 
-    public void driveTime(double angle, int time, double speed) {
+    public void driveByTime(double angle, int time, double speed) {
 
         double y = speed * Math.sin(Math.toRadians(angle));
         double x = speed * Math.cos(Math.toRadians(angle));
@@ -119,7 +110,7 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         backright.setPower(0);
     }
 
-    public void driveEncoder(double angle, double speed, double inches) {
+    public void driveByEncoder(double angle, double speed, double inches) {
 
         double y = speed * Math.sin(Math.toRadians(angle));
         double x = speed * Math.cos(Math.toRadians(angle));
@@ -203,5 +194,19 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         frontright.setPower(speed);
         backleft.setPower(speed);
         backright.setPower(speed);
+    }
+    public void brickCorrection() {
+        if (xPosition <= 10)
+            drive(0,.25);
+            telemetry.addLine("Moving Left");
+        if (xPosition >= 10)
+            drive(180,.25);
+            telemetry.addLine("Moving Right");
+        if (yPosition <= 10)
+            drive(90,.25);
+            telemetry.addLine("Moving Forward");
+        if (yPosition >= 10)
+            drive(270,.25);
+            telemetry.addLine("Moving Backward");
     }
 }

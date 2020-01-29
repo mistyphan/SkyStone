@@ -11,12 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele Op")
 public class Driver extends OpMode {
-    DcMotor frontleft, frontright, backleft, backright, arm;
+    DcMotor frontleft, frontright, backleft, backright, arm, lift;
     public float x, y, z, w, pwr;
     public static double deadzone = 0.2;
-    private CRServo Grabber;
-    private CRServo servoFoundationLeft;
-    private CRServo servoFoundationRight;
+    private CRServo claw;
+    private CRServo clawRoation;
 
 
     @Override
@@ -26,9 +25,9 @@ public class Driver extends OpMode {
         backleft = hardwareMap.dcMotor.get("BL");
         backright = hardwareMap.dcMotor.get("BR");
         arm = hardwareMap.dcMotor.get("Arm");
-        Grabber = hardwareMap.crservo.get("Grabber");
-        servoFoundationLeft = hardwareMap.crservo.get("ServoFoundLeft");
-        servoFoundationRight = hardwareMap.crservo.get("ServoFoundRight");
+        lift = hardwareMap.dcMotor.get("Lift");
+        claw = hardwareMap.crservo.get("Claw");
+        clawRoation = hardwareMap.crservo.get("ClawRotation");
 
 
         frontleft.setDirection(DcMotor.Direction.REVERSE);
@@ -65,27 +64,39 @@ public class Driver extends OpMode {
         //checks deadzones
 
         if (gamepad1.dpad_up) {
-            arm.setPower(.35);
+            arm.setPower(1);
         } else if (gamepad1.dpad_down) {
-            arm.setPower(-.35);
+            arm.setPower(-1);
         } else {
             arm.setPower(0);
+
+
+        }
+        if (gamepad1.dpad_left) {
+            clawRoation.setPower(1);
+        } else if (gamepad1.dpad_right) {
+            clawRoation.setPower(-1);
+        } else {
+            clawRoation.setPower(0);
         }
 
+
+
         if (gamepad1.a) {
-            servoFoundationLeft.setPower(.5);
-            servoFoundationRight.setPower(-.5);
-        } else if (gamepad1.y) {
-            servoFoundationLeft.setPower(-.5);
-            servoFoundationRight.setPower(.5);
+            lift.setPower(1);
+        } else if (gamepad1.b) {
+            lift.setPower(-1);
         } else {
-            servoFoundationLeft.setPower(0);
-            servoFoundationRight.setPower(0);
+            lift.setPower(0);
         }
+
+
         if (gamepad1.x) {
-            Grabber.setPower(.5);
+            claw.setPower(.5);
+        } else if (gamepad1.y) {
+            claw.setPower(-.5);
         } else {
-            Grabber.setPower(0);
+            claw.setPower(0);
         }
     }
 }
