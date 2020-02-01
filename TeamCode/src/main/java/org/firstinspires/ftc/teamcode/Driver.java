@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.util.Range;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele Op")
 public class Driver extends OpMode {
     DcMotor frontleft, frontright, backleft, backright, arm, lift;
+    private CRServo claw, foundL, foundR;
     public float x, y, z, w, pwr;
     public static double deadzone = 0.2;
-    private CRServo claw;
-    private CRServo clawRoation;
+
 
 
     @Override
@@ -27,7 +27,8 @@ public class Driver extends OpMode {
         arm = hardwareMap.dcMotor.get("Arm");
         lift = hardwareMap.dcMotor.get("Lift");
         claw = hardwareMap.crservo.get("Claw");
-        clawRoation = hardwareMap.crservo.get("ClawRotation");
+        foundL = hardwareMap.crservo.get("FoundR");
+        foundR = hardwareMap.crservo.get("FoundR");
 
 
         frontleft.setDirection(DcMotor.Direction.REVERSE);
@@ -50,10 +51,10 @@ public class Driver extends OpMode {
 
 
     public void getJoyVals() {
-        y = -gamepad1.left_stick_y;
-        x = gamepad1.left_stick_x;
-        z = -gamepad1.right_stick_x;
-        w = gamepad1.right_stick_y;
+        y = -gamepad1.left_stick_y/2;
+        x = gamepad1.left_stick_x/2;
+        z = -gamepad1.right_stick_x/2;
+        w = gamepad1.right_stick_y/2;
         //updates joystick values
 
 
@@ -64,39 +65,40 @@ public class Driver extends OpMode {
         //checks deadzones
 
         if (gamepad1.dpad_up) {
-            arm.setPower(1);
-        } else if (gamepad1.dpad_down) {
             arm.setPower(-1);
+        } else if (gamepad1.dpad_down) {
+            arm.setPower(1);
         } else {
             arm.setPower(0);
 
 
-        }
-        if (gamepad1.dpad_left) {
-            clawRoation.setPower(1);
-        } else if (gamepad1.dpad_right) {
-            clawRoation.setPower(-1);
-        } else {
-            clawRoation.setPower(0);
-        }
+            if (gamepad1.y) {
+                lift.setPower(1);
+            } else if (gamepad1.a) {
+                lift.setPower(-1);
+            } else {
+                lift.setPower(0);
+            }
 
 
+            if (gamepad1.dpad_left) {
+                claw.setPower(.5);
+            } else if (gamepad1.dpad_right) {
+                claw.setPower(-.5);
+            } else {
+                claw.setPower(0);
+            }
 
-        if (gamepad1.a) {
-            lift.setPower(1);
-        } else if (gamepad1.b) {
-            lift.setPower(-1);
-        } else {
-            lift.setPower(0);
-        }
-
-
-        if (gamepad1.x) {
-            claw.setPower(.5);
-        } else if (gamepad1.y) {
-            claw.setPower(-.5);
-        } else {
-            claw.setPower(0);
+            if (gamepad1.x) {
+                foundL.setPower(.5);
+                foundR.setPower(-.5);
+            } else if (gamepad1.b) {
+                foundR.setPower(-.5);
+                foundL.setPower(.5);
+            } else {
+                foundL.setPower(0);
+                foundR.setPower(0);
+            }
         }
     }
 }

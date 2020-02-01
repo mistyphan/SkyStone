@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.teamcode.VuInterface;
 
 @Autonomous(name= "Foundation", group="Skystone")
 // below is the Annotation that registers this OpMode with the FtcRobotController app.
@@ -17,16 +16,16 @@ import org.firstinspires.ftc.teamcode.VuInterface;
 // uncomment the @Disable annotation to remove the OpMode from the OpMode list.
 
 //@Disabled
-    public class AutonomusBrickside extends LinearOpMode {
+    public class AutonomusFoundationSide extends LinearOpMode {
     DcMotor frontleft;
     DcMotor backleft;
     DcMotor frontright;
     DcMotor backright;
     DcMotor arm;
     DcMotor lift;
-    private CRServo claw;
-    private CRServo foundL;
-    private CRServo foundR;
+    CRServo claw;
+    CRServo foundL;
+    CRServo foundR;
     public float x, y, z, w, pwr;
     public static double deadzone = 0.2;
     double velocity;
@@ -68,7 +67,15 @@ import org.firstinspires.ftc.teamcode.VuInterface;
         frontright = hardwareMap.dcMotor.get("FR");
         backleft = hardwareMap.dcMotor.get("BL");
         backright = hardwareMap.dcMotor.get("BR");
+        arm = hardwareMap.dcMotor.get("Arm");
+        lift = hardwareMap.dcMotor.get("Lift");
+        claw = hardwareMap.crservo.get("Claw");
+        foundL = hardwareMap.crservo.get("FoundR");
+        foundR = hardwareMap.crservo.get("FoundR");
         BrickVision = new VuInterface(hardwareMap);
+
+
+
 
         //robot.init(HardwareMap);
         BrickVision.initializeVuforia();
@@ -81,7 +88,22 @@ import org.firstinspires.ftc.teamcode.VuInterface;
 
         waitForStart();
 
-
+        driveByEncoder(180,.5,24);
+        sleep(3000);
+        driveByEncoder(90,.5,30);
+        sleep(3000);
+        foundL.setPower(.5);
+        foundR.setPower(-.5);
+        sleep(500);
+        foundL.setPower(0);
+        foundR.setPower(0);
+        driveByEncoder(270, .5, 30);
+        foundL.setPower(-.5);
+        foundR.setPower(.5);
+        sleep(500);
+        foundL.setPower(0);
+        foundR.setPower(0);
+        driveByEncoder(0,.5,24);
 
     }
 

@@ -135,7 +135,8 @@ public class VuInterface {
             return xAndyPosition;
         }
         else {
-            return null;
+            double[] xAndyPosition = {0, 0};
+            return xAndyPosition;
         }
     }
 }
